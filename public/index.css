@@ -1,0 +1,265 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#principal {
+    width: 100vw;
+    height: 100vh;
+    background: url(./images/Whatsapp-Wallpaper-120-768x1365-1.jpg) no-repeat;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#principal>div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* background-color: white;
+    padding: 4%;
+    border-radius: 5px; */
+}
+
+#principal>div>h1 {
+    font-size: 50px;
+    color: white;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+#principal>div>input {
+    width: 300px;
+    height: 50px;
+    margin: 10px;
+    border-radius: 10px;
+    border: none;
+    padding: 10px;
+    font-size: 20px;
+}
+
+#principal>div>button {
+    width: 300px;
+    height: 50px;
+    margin: 10px;
+    border-radius: 10px;
+    border: none;
+    padding: 10px;
+    font-size: 20px;
+    background-color: #25D366;
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+#principal>div>button:hover {
+    background-color: #128C7E;
+}
+
+#principal>div>p {
+    font-size: 20px;
+    color: white;
+    font-weight: 500;
+    margin-top: 10px;
+}
+
+#principal>div>input[type="file"] {
+    color: aliceblue;
+    font-size: 20px;
+    font-weight: 500;
+    cursor: pointer;
+
+
+}
+
+/*------------------------------------*/
+#secundario {
+    width: 100vw;
+    height: 100vh;
+    background: url(./images/Whatsapp-Wallpaper-120-768x1365-1.jpg) no-repeat;
+    background-size: cover;
+}
+
+#nav {
+    width: 100vw;
+    background-color: #128C7E;
+    height: 10vh;
+    color: white;
+    display: flex;
+    flex-direction: row;
+}
+
+.imgs {
+    width: 3vw;
+    margin-right: 3%;
+    margin-right: 3%;
+}
+
+#nav>div {
+    display: flex;
+    align-items: center;
+    font-size: large;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+#nav>div:nth-child(1) {
+    width: 30%;
+}
+
+#nav>div:nth-child(2) {
+    width: 70%;
+    justify-content: space-between;
+    margin-right: 3%;
+}
+
+#nav>div:nth-child(2)>div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#nav-h4 {
+    margin-right: 3%;
+    width: 16vw;
+}
+
+/*---------------------------------------------*/
+#chat-user {
+    width: 100vw;
+    height: 90vh;
+    color: white;
+    display: flex;
+    flex-direction: row;
+}
+
+#users {
+    width: 30%;
+    height: 100%;
+    background-color: #128C7E;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#users>div:nth-child(1) {
+    width: 100%;
+    height: 10%;
+    text-align: center;
+    padding: 2%;
+    font-family: Arial, Helvetica, sans-serif;
+
+}
+
+#users>div:nth-child(2) {
+    width: 100%;
+    height: 90%;
+}
+
+#usuarios-mostrar>div {
+    width: 100%;
+    height: 10%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 2%;
+    font-size: large;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+#chat {
+    width: 70%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#chat>div:nth-child(1) {
+    width: 100%;
+    height: 90%;
+    /* text-align: center; */
+    padding: 2%;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+}
+
+#chat>div:nth-child(2) {
+    width: 100%;
+    height: 10%;
+    background-color: #128C7E;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#chat>div:nth-child(2)>i {
+    font-size: 2em;
+    margin: 2%;
+    color: white;
+}
+
+#chat>div:nth-child(2)>i:hover {
+    color: #25D366;
+
+}
+
+#chat>div:nth-child(2)>form {
+    width: 80%;
+    height: 70%;
+
+}
+
+#chat>div:nth-child(2)>form>input {
+    border-radius: 10px;
+    border: none;
+    padding: 10px;
+    font-size: 20px;
+    width: 100%;
+}
+
+.user--image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.usuario {
+    background-color: #25D366;
+    color: white;
+    font-size: medium;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: end;
+    margin: 2%;
+    width: auto;
+    justify-content: end;
+}
+
+.amigo {
+    background-color: #25D366;
+    color: white;
+    font-size: medium;
+    padding: 10px;
+    border-radius: 10px;
+    /* text-align: end; */
+    margin: 3%;
+    width: auto;
+    justify-content: center;
+}
+
+.salir-entrar-chat {
+    background-color: #128C7E;
+    text-align: center;
+    border-radius: 25px;
+    padding: 1%;
+    margin-top: 2%;
+}
+
+.i-check {
+    color: #128C7E;
+    font-size: 2em;
+}

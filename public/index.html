@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+    <!-- Vista logueo -->
+    <div id="principal">
+        <div>
+            <h1>Whatsapp Clone 4</h1>
+            <input type="text" id="name" placeholder="Escriba su nombre">
+            <input type="file" accept='image/*' onchange="mostrar()" id="file" />
+            <p>Puede no elegir imagen, ya que hay una por defecto</p>
+            <button onclick="usuarioLogueado()">Entrar</button>
+        </div>
+    </div>
+    <!-- Vista una vez logueado -->
+    <div id="secundario" hidden>
+        <section id="nav">
+            <div>
+                <img class="user--image">
+                <h4 id="user-nav"></h4>
+            </div>
+            <div>
+                <div>
+                    <img class="imgs" src="images/WhatsApp.svg.webp">
+                    <h4 id="nav-h4">Sala grupal</h4>
+                </div>
+                <div>
+                    <i class="fa fa-search" style="font-size: 2em;"></i>
+                </div>
+            </div>
+        </section>
+        <section id="chat-user">
+            <div id="users">
+                <div id="usuarios-concectados-div">
+                    <h3 id="usuarios-concectados"></h3>
+                    <p id="personaEscribiendo" style="color: gainsboro;"></p>
+                </div>
+                <div id="usuarios-mostrar">
+                </div>
+            </div>
+            <div id="chat">
+                <div id="mensajes"></div>
+                <div id="escribir">
+                    <i class="fa fa-smile-o"></i>
+                    <i class="fa fa-paperclip"></i>
+                    <form id="form" action="">
+                        <input type="text" id="input" placeholder="Escribe un mensaje">
+                    </form>
+                    <i class="fa fa-microphone"></i>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        /*Variables*/
+        var socket = io();
+        var datosUsuario = [];
+        var imagen = "";
+        var nombre = "";
+        var form = document.getElementById('form');
+        var input = document.getElementById('input');
+        var divPrincipal = document.getElementById('principal');
+        var divSecundario = document.getElementById('secundario');
+        var usersImages = document.getElementsByClassName('user--image');
+        var users = document.getElementById('users');
+        var mostrarMensaje = document.getElementById('mostrarMensaje');
+        var personaEscribiendo = document.getElementById('personaEscribiendo');
+        var divsUsuarios = document.getElementsByClassName("usuarios");
+        var listaUsuarios = [];
+
+        /*Funciones*/
+
+        /*Usuario escribe y deja de escribir (emits)*/
+        document.getElementById('input').addEventListener('keyup', function (e) {
+            if (e.keyCode == 13) {
+                socket.emit('no-escribiendo');
+            }
+            else {
+                socket.emit('escribiendo', document.getElementById("user-nav").innerHTML);
+            }
+        });
+        /*Usuario deja de escribir (recibe de vuelta)*/
+        socket.on("no-escribiendo", () => {
+            personaEscribiendo.innerHTML = "";
+
+        });
+        /*Usuario escribe (recibe de vuelta)*/
+        socket.on("escribiendo", (datos) => {
+            personaEscribiendo.innerHTML = `${datos} esta escribiendo...`;
+
+        });
+
+        /*Usuario mensaje (emit)*/
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            if (input.value) {
+                var hora = new Date();
+                var horas = hora.getHours();
+                var minutos = hora.getMinutes();
+                socket.emit('mensaje', { mensaje: input.value, usuario: document.getElementById("user-nav").innerHTML, hora: horas, minutos: minutos });
+                input.value = '';
+            }
+        });
+
+        /*Usuario mensaje (recibe de vuelta)*/
+        socket.on("mensaje", (datos) => {
+            if (document.getElementById("user-nav").innerHTML == datos.usuario) {
+                document.getElementById("mensajes").innerHTML += `<div class="usuario"><div>${datos.usuario}: ${datos.mensaje}
+                <i class="fa fa-check i-check"></i><i class="fa fa-check i-check"></i></div>
+                <div class="hora">${datos.hora} : ${datos.minutos}</div>
+                </div>`;
+            } else {
+                document.getElementById("mensajes").innerHTML += `<div class="amigo"><div>${datos.usuario}: ${datos.mensaje}
+                <i class="fa fa-check i-check"></i><i class="fa fa-check i-check"></i></div>
+                <div class="hora">${datos.hora} : ${datos.minutos}</div>
+                </div>`;
+            }
+        });
+
+        /*Usuarios conectados (recibe de vuelta)*/
+        socket.on("usuariosConcetados", (usuarios) => {
+            document.getElementById('usuarios-concectados').innerHTML = `Usuarios conectados (${usuarios})`;
+        });
+
+        /*Logueo de usuario (emit)*/
+        function usuarioLogueado() {
+            var name = document.getElementById('name').value;
+            if (name == "") {
+                alert("Debe ingresar un nombre");
+            } else {
+                nombre = name;
+                document.getElementById('user-nav').innerHTML = nombre;
+                if (imagen == "") {
+                    imagen = "./images/3d27c1d91548b66bbe4d0610d9515615.jpg";
+                    usersImages[0].src = "./images/3d27c1d91548b66bbe4d0610d9515615.jpg";
+
+                }
+                socket.emit('usuarioLogueado1', { name, imagen });
+            }
+        }
+
+        /*Logueo usuario (recibe de vuelta)*/
+        socket.on("usuarioLogueadoActualizado", (datos) => {
+            datosUsuario = datos.usuario;
+            divPrincipal.remove();
+            divSecundario.removeAttribute("hidden");
+            nombre = datosUsuario.name;
+            actualizarLista(datos.listaUsuarios);
+            document.getElementById("mensajes").innerHTML += `<div class="salir-entrar-chat">Usuario conectado: ${nombre}</div>`;
+
+        });
+
+        /*Actualizar lista (recibe de vuelta)*/
+        socket.on("actualizarLista", (datos) => {
+            document.getElementById("mensajes").innerHTML += `<div class="salir-entrar-chat">Ha salido del chat: ${datos.usuario}</div>`;
+            actualizarLista(datos.listaUsuarios);
+        });
+
+        function actualizarLista(listaUsuarios) {
+            document.getElementById('usuarios-mostrar').innerHTML = listaUsuarios.map(usuario =>
+                `<div class="usuarios">
+                <img class="user--image" src="${usuario.imagen}">
+                <h4 id="user-chat">${usuario.name}</h4>
+                </div>`).join("");
+        }
+
+        /*Foto de perfil*/
+        function mostrar() {
+            var archivo = document.getElementById("file").files[0];
+            usersImages[0].src = "";
+            var reader = new FileReader();
+            if (file) {
+                reader.readAsDataURL(archivo);
+                reader.onloadend = function () {
+                    imagen = reader.result;
+                    usersImages[0].src = reader.result;
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
